@@ -1,24 +1,31 @@
 import React from 'react';
 import * as ProjectActions from '../actions/ProjectActions';
+import { FlatButton } from 'material-ui';
+import TextField from 'material-ui/TextField';
 
 export default class AddProject extends React.Component {
+
     constructor() {
         super();
+
+        this.handleOnChange = this.handleOnChange.bind(this);
+        this.addProjectHandle = this.addProjectHandle.bind(this);
+        this.state = { project: {} };
     }
 
-    addProjectHandle = (e) => {
+    addProjectHandle(e) {
         ProjectActions.addProject(this.state.project);
     }
 
-    handleOnChange = () => {
+    handleOnChange() {
         const id = Date.now();
 
         this.setState({
             project: {
                 id: id,
-                title: this.refs.title.value,
-                description: this.refs.description.value,
-                owner: this.refs.owner.value
+                title: this.refs.title.getValue(),
+                description: this.refs.description.getValue(),
+                owner: this.refs.owner.getValue()
             }
         });
     }
@@ -26,20 +33,20 @@ export default class AddProject extends React.Component {
     render() {
         return (
             <div>
-                <div>Title:
-                    <input value={this.props.title} onChange={this.handleOnChange} ref="title" />
+                <div>
+                    <TextField hintText="Title" value={this.props.title} onChange={this.handleOnChange} ref="title" />
                 </div>
-                <div>Description:
-                    <input ref="description" onChange={this.handleOnChange} />
+                <div>
+                    <TextField hintText="Description" onChange={this.handleOnChange} ref="description" />
                 </div>
-                <div>Owner:
-                    <input ref="owner" onChange={this.handleOnChange} />
+                <div>
+                    <TextField hintText="Owner" ref="owner" onChange={this.handleOnChange} ref="owner" />
                 </div>
                 <br />
-                <button onClick={this.addProjectHandle}>Add Project</button>
+                <FlatButton onClick={this.addProjectHandle}>Add Project</FlatButton>
                 <br />
                 <br />
             </div>
         );
-    }    
+    }
 }

@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 
 //Components
-import ProjectList from './components/ProjectList';
 import Header from './components/Header';
 import Layout from './components/Layout';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class App extends Component {
   render() {
     return (
-      <div>
-        <Header />
-        <Layout />
-      </div>
+      <MuiThemeProvider>
+        <div>
+          <Header />
+          <Layout />
+        </div>
+      </MuiThemeProvider>
     );
   }
 }
