@@ -11,7 +11,7 @@ class ProjectStore extends EventEmitter {
             id: Date.now(),
             title: 'Bain Capital',
             description: 'O365 Intranet solution',
-            owner: 'Antonio Briones' 
+            owner: 'Antonio Briones'
         },
         {
             id: Date.now() + 1,
@@ -32,7 +32,7 @@ class ProjectStore extends EventEmitter {
 
     removeProject(id) {
         let index = this.projects.map(item => item.id).indexOf(id);
-        this.projects = this.projects.splice(index);
+        this.projects.splice(index, 1);
         this.emit('change');
     }
 
@@ -43,7 +43,7 @@ class ProjectStore extends EventEmitter {
                 break;
             }
             case ActionConstants.Remove_Project: {
-                this.removeProject(action.id);
+                this.removeProject(action.value);
                 break;
             }
             default: break;

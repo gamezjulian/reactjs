@@ -32,7 +32,10 @@ export default class AddProject extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className>
+                <div>
+                    <h2>Create new project!</h2>
+                </div>
                 <div>
                     <TextField hintText="Title" value={this.props.title} onChange={this.handleOnChange} ref="title" />
                 </div>

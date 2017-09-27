@@ -4,6 +4,8 @@ import ProjectStore from '../stores/ProjectStore';
 import AddProject from './AddProject';
 import * as ProjectActions from '../actions/ProjectActions';
 import RemoveProject from './RemoveProject';
+import RaisedButton from 'material-ui/RaisedButton';
+import Divider from 'material-ui/Divider';
 
 // material
 import {
@@ -24,6 +26,7 @@ export default class ProjectList extends React.Component {
         this.handleRowSelection = this.handleRowSelection.bind(this);
         this.removeProjectHandler = this.removeProjectHandler.bind(this);
         this.isSelected = this.isSelected.bind(this);
+        this.openRemove = this.openRemove.bind(this);
 
         this.state = {
             projects: ProjectStore.getProjects(),
@@ -46,17 +49,31 @@ export default class ProjectList extends React.Component {
 
     removeProjectHandler = () => {
         let { selected } = this.state;
-        ProjectActions.removeProject(selected[0])
-        this.setState({ open: false });
+        const projects = ProjectStore.getProjects();
+        const proj = projects[selected[0]];
+        ProjectActions.removeProject(proj.id);
+        this.setState({
+            open: false,
+            selected: []
+        });
     }
 
     handleRowSelection(selectedRows) {
         if (selectedRows.length) {
             this.setState({
-                open: true,
                 selected: selectedRows
             });
+        } else {
+            this.setState({
+                selected: []
+            });
         }
+    }
+
+    openRemove() {
+        this.setState({
+            open: this.state.selected.length != 0
+        });
     }
 
     isSelected(index) {
@@ -70,6 +87,7 @@ export default class ProjectList extends React.Component {
             return (
                 <TableRow key={p.id} selected={this.isSelected(index)}>
                     <TableRowColumn>{p.id}</TableRowColumn>
+                    <TableRowColumn>{p.title}</TableRowColumn>
                     <TableRowColumn>{p.description}</TableRowColumn>
                     <TableRowColumn>{p.owner}</TableRowColumn>
                 </TableRow>
@@ -83,17 +101,29 @@ export default class ProjectList extends React.Component {
                     <TableHeader>
                         <TableRow>
                             <TableHeaderColumn>ID</TableHeaderColumn>
+                            <TableHeaderColumn>Title</TableHeaderColumn>
                             <TableHeaderColumn>Description</TableHeaderColumn>
                             <TableHeaderColumn>Owner</TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
                     <TableBody
+                        deselectOnClickaway={false}
                         displayRowCheckbox={true}>
                         {projs}
                     </TableBody>
                 </Table>
                 <RemoveProject onRemove={this.removeProjectHandler} open={this.state.open} />
-            </div >
+                <br />
+                <Divider />
+                {
+                    this.state.selected.length ?
+                        <div>
+                            <RaisedButton label="Delete" onClick={this.openRemove} />
+                            <RaisedButton label="View details" />
+                        </div>
+                        : null
+                }
+            </div>
         );
     }
 }
