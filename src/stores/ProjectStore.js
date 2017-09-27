@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import dispatcher from '../dispatcher/dispatcher';
+import ActionConstants from '../constants/actions';
 
 class ProjectStore extends EventEmitter {
 
@@ -7,18 +8,20 @@ class ProjectStore extends EventEmitter {
         super();
 
         this.projects = [{
+            id: Date.now(),
             title: 'Bain Capital',
             description: 'O365 Intranet solution',
-            owner: 'Antonio Briones'
+            owner: 'Antonio Briones' 
         },
         {
+            id: Date.now() + 1,
             title: 'Unily',
             description: 'Product that provides a custom intranet in quite few steps',
             owner: 'Will Saville'
         }];
     }
 
-    getProjects(){
+    getProjects() {
         return this.projects;
     }
 
@@ -27,11 +30,23 @@ class ProjectStore extends EventEmitter {
         this.emit("change");
     }
 
+    removeProject(id) {
+        let index = this.projects.map(item => item.id).indexOf(id);
+        this.projects = this.projects.splice(index);
+        this.emit('change');
+    }
+
     handleActions = (action) => {
         switch (action.type) {
-            case "ADD_PROJECT": {
+            case ActionConstants.Add_Project: {
                 this.addProject(action.value);
+                break;
             }
+            case ActionConstants.Remove_Project: {
+                this.removeProject(action.id);
+                break;
+            }
+            default: break;
         }
     }
 }

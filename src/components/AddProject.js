@@ -6,9 +6,21 @@ export default class AddProject extends React.Component {
         super();
     }
 
-    addProjectHandle = (e) => {        
+    addProjectHandle = (e) => {
         ProjectActions.addProject(this.state.project);
+    }
 
+    handleOnChange = () => {
+        const id = Date.now();
+
+        this.setState({
+            project: {
+                id: id,
+                title: this.refs.title.value,
+                description: this.refs.description.value,
+                owner: this.refs.owner.value
+            }
+        });
     }
 
     render() {
@@ -24,20 +36,10 @@ export default class AddProject extends React.Component {
                     <input ref="owner" onChange={this.handleOnChange} />
                 </div>
                 <br />
-                <button type='submit' onClick={this.addProjectHandle} >Add Project</button>
+                <button onClick={this.addProjectHandle}>Add Project</button>
                 <br />
                 <br />
             </div>
         );
-    }
-
-    handleOnChange = (e) => {
-        this.setState({
-            project: {
-                title: this.refs.title.value,
-                description: this.refs.description.value,
-                owner: this.refs.owner.value
-            }
-        });        
-    }
+    }    
 }

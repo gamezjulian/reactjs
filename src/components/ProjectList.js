@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Project from './Project';
-import ProjectStore from '../stores/ProjectStore'
+import ProjectStore from '../stores/ProjectStore';
 import AddProject from './AddProject';
 
 export default class ProjectList extends React.Component {
@@ -31,8 +31,8 @@ export default class ProjectList extends React.Component {
         const { projects } = this.state;
         const projs = projects.map((p) => {
             return (
-                <div key={p.title}>
-                    <Project title={p.title} description={p.description} owner={p.owner} />
+                <div key={p.id}>
+                    <Project title={p.title} id={p.id} description={p.description} owner={p.owner} />
                     <br />
                 </div>
             )
