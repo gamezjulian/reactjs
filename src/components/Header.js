@@ -11,7 +11,7 @@ export default class Header extends React.Component {
                         <img src={logo} className="App-logo" alt="logo" />
                         <h2>Welcome to Project Manager</h2>
                     </div>
-                </div>
+                </div>                            
             </header>
         )
     }

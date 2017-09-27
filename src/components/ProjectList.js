@@ -23,10 +23,11 @@ export default class ProjectList extends React.Component {
     constructor() {
         super();
 
-        this.handleRowSelection = this.handleRowSelection.bind(this);
+        this.rowSelectionHandler = this.rowSelectionHandler.bind(this);
         this.removeProjectHandler = this.removeProjectHandler.bind(this);
         this.isSelected = this.isSelected.bind(this);
-        this.openRemove = this.openRemove.bind(this);
+        this.openRemoveModal = this.openRemoveModal.bind(this);
+        this.closeRemoveModal = this.closeRemoveModal.bind(this);
 
         this.state = {
             projects: ProjectStore.getProjects(),
@@ -58,7 +59,7 @@ export default class ProjectList extends React.Component {
         });
     }
 
-    handleRowSelection(selectedRows) {
+    rowSelectionHandler(selectedRows) {
         if (selectedRows.length) {
             this.setState({
                 selected: selectedRows
@@ -70,7 +71,13 @@ export default class ProjectList extends React.Component {
         }
     }
 
-    openRemove() {
+    closeRemoveModal() {
+        this.setState({
+            open: false
+        });
+    }
+
+    openRemoveModal() {
         this.setState({
             open: this.state.selected.length != 0
         });
@@ -95,9 +102,8 @@ export default class ProjectList extends React.Component {
         })
 
         return (
-            <div>
-                <AddProject />
-                <Table onRowSelection={this.handleRowSelection}>
+            <div>                
+                <Table onRowSelection={this.rowSelectionHandler}>
                     <TableHeader>
                         <TableRow>
                             <TableHeaderColumn>ID</TableHeaderColumn>
@@ -112,17 +118,18 @@ export default class ProjectList extends React.Component {
                         {projs}
                     </TableBody>
                 </Table>
-                <RemoveProject onRemove={this.removeProjectHandler} open={this.state.open} />
+
+                {this.state.open ?
+                    <RemoveProject onRemove={this.removeProjectHandler} onClose={this.closeRemoveModal} />
+                    : null
+                }
+
                 <br />
                 <Divider />
-                {
-                    this.state.selected.length ?
-                        <div>
-                            <RaisedButton label="Delete" onClick={this.openRemove} />
-                            <RaisedButton label="View details" />
-                        </div>
-                        : null
-                }
+                <div>
+                    <RaisedButton primary={true} label="Delete" disabled={!this.state.selected.length} onClick={this.openRemoveModal} />
+                    <RaisedButton primary={true} label="View details" disabled={!this.state.selected.length} />
+                </div>
             </div>
         );
     }

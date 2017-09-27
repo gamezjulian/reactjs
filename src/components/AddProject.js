@@ -1,6 +1,6 @@
 import React from 'react';
 import * as ProjectActions from '../actions/ProjectActions';
-import { FlatButton } from 'material-ui';
+import { RaisedButton } from 'material-ui';
 import TextField from 'material-ui/TextField';
 
 export default class AddProject extends React.Component {
@@ -32,7 +32,7 @@ export default class AddProject extends React.Component {
 
     render() {
         return (
-            <div className>
+            <div>
                 <div>
                     <h2>Create new project!</h2>
                 </div>
@@ -46,7 +46,7 @@ export default class AddProject extends React.Component {
                     <TextField hintText="Owner" ref="owner" onChange={this.handleOnChange} ref="owner" />
                 </div>
                 <br />
-                <FlatButton onClick={this.addProjectHandle}>Add Project</FlatButton>
+                <RaisedButton primary={true} onClick={this.addProjectHandle} label="Add Project"></RaisedButton>
                 <br />
                 <br />
             </div>
