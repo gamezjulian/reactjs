@@ -7,18 +7,7 @@ class ProjectStore extends EventEmitter {
     constructor() {
         super();
 
-        this.projects = [{
-            id: Date.now(),
-            title: 'Bain Capital',
-            description: 'O365 Intranet solution',
-            owner: 'Antonio Briones'
-        },
-        {
-            id: Date.now() + 1,
-            title: 'Unily',
-            description: 'Product that provides a custom intranet in quite few steps',
-            owner: 'Will Saville'
-        }];
+        this.projects = [];
     }
 
     getProjects() {
@@ -27,7 +16,6 @@ class ProjectStore extends EventEmitter {
 
     addProject(project) {
         this.projects.push(project);
-        this.emit("change");
         this.emit("project_added");
     }
 
@@ -53,6 +41,7 @@ class ProjectStore extends EventEmitter {
 }
 
 const projectStore = new ProjectStore();
+window.projectStore = projectStore;
 dispatcher.register(projectStore.handleActions);
 
 export default projectStore;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Drawer, MenuItem } from 'material-ui';
+import { Drawer } from 'material-ui';
 import RaisedButton from 'material-ui/RaisedButton';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';

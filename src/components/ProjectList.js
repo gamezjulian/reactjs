@@ -2,10 +2,11 @@ import React from 'react';
 
 import ProjectStore from '../stores/ProjectStore';
 import AddProject from './AddProject';
-import * as ProjectActions from '../actions/ProjectActions';
+import * as Actions from '../actions/Actions';
 import RemoveProject from './RemoveProject';
 import RaisedButton from 'material-ui/RaisedButton';
 import Divider from 'material-ui/Divider';
+import NotificationStore from '../stores/NotificationStore';
 
 // material
 import {
@@ -37,11 +38,11 @@ export default class ProjectList extends React.Component {
     }
 
     componentWillMount() {
-        ProjectStore.on("change", this.getProjects)
+        ProjectStore.on("project_added", this.getProjects)
     }
 
     componentWillUnmount() {
-        ProjectStore.removeListener("change", this.getProjects);
+        ProjectStore.removeListener("project_added", this.getProjects);
     }
 
     getProjects = () => {
@@ -52,7 +53,7 @@ export default class ProjectList extends React.Component {
         let { selected } = this.state;
         const projects = ProjectStore.getProjects();
         const proj = projects[selected[0]];
-        ProjectActions.removeProject(proj.id);
+        Actions.ProjectActions.removeProject(proj.id);
         this.setState({
             open: false,
             selected: []
@@ -97,12 +98,14 @@ export default class ProjectList extends React.Component {
                     <TableRowColumn>{p.title}</TableRowColumn>
                     <TableRowColumn>{p.description}</TableRowColumn>
                     <TableRowColumn>{p.owner}</TableRowColumn>
+                    <TableRowColumn>{p.startDate}</TableRowColumn>
+                    <TableRowColumn>{p.endDate}</TableRowColumn>
                 </TableRow>
             )
         })
 
         return (
-            <div>                
+            <div>
                 <Table onRowSelection={this.rowSelectionHandler}>
                     <TableHeader>
                         <TableRow>
@@ -110,6 +113,8 @@ export default class ProjectList extends React.Component {
                             <TableHeaderColumn>Title</TableHeaderColumn>
                             <TableHeaderColumn>Description</TableHeaderColumn>
                             <TableHeaderColumn>Owner</TableHeaderColumn>
+                            <TableHeaderColumn>Start Date</TableHeaderColumn>
+                            <TableHeaderColumn>End Date</TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
                     <TableBody
