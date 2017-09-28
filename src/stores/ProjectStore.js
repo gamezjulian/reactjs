@@ -28,6 +28,7 @@ class ProjectStore extends EventEmitter {
     addProject(project) {
         this.projects.push(project);
         this.emit("change");
+        this.emit("project_added");
     }
 
     removeProject(id) {

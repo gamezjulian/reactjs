@@ -13,6 +13,10 @@ export default class AddProject extends React.Component {
         this.state = { project: {} };
     }
 
+    componentWillMount(){
+        ProjectStore.on("project_added", this.getProjects)
+    }
+
     addProjectHandle(e) {
         ProjectActions.addProject(this.state.project);
     }
@@ -32,7 +36,7 @@ export default class AddProject extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="add-project">
                 <div>
                     <h2>Create new project!</h2>
                 </div>
