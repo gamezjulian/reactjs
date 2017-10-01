@@ -3,6 +3,7 @@ import * as Actions from '../actions/Actions';
 import { RaisedButton } from 'material-ui';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
+import ProjectStore from '../stores/ProjectStore';
 
 export default class AddProject extends React.Component {
 
@@ -97,12 +98,12 @@ export default class AddProject extends React.Component {
                         rows={4}
                         rowsMax={8}
                         hintText="Description"
-                        onChange={this.handleOnChange}                        
+                        onChange={this.handleOnChange}
                         floatingLabelText="Description"
                         ref="description" />
                 </div>
                 <div>
-                    <TextField  hintText="Owner" floatingLabelText="Owner" ref="owner" onChange={this.handleOnChange} ref="owner" />
+                    <TextField hintText="Owner" floatingLabelText="Owner" ref="owner" onChange={this.handleOnChange} ref="owner" />
                 </div>
                 <div>
                     <DatePicker hintText="Start Date" floatingLabelText="Start Date" ref="startDate" onChange={this.handleStartDateOnChange} />
