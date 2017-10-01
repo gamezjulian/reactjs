@@ -1,14 +1,17 @@
 import React from 'react';
 
 import ProjectStore from '../stores/ProjectStore';
+import NotificationStore from '../stores/NotificationStore';
+
 import AddProject from './AddProject';
 import * as Actions from '../actions/Actions';
 import RemoveProject from './RemoveProject';
-import RaisedButton from 'material-ui/RaisedButton';
-import Divider from 'material-ui/Divider';
-import NotificationStore from '../stores/NotificationStore';
 
 // material
+
+import Button from 'material-ui/Button';
+import Divider from 'material-ui/Divider';
+
 import {
     Table,
     TableBody,
@@ -132,8 +135,8 @@ export default class ProjectList extends React.Component {
                 <br />
                 <Divider />
                 <div>
-                    <RaisedButton primary={true} label="Delete" disabled={!this.state.selected.length} onClick={this.openRemoveModal} />
-                    <RaisedButton primary={true} label="View details" disabled={!this.state.selected.length} />
+                    <Button primary={true} label="Delete" disabled={!this.state.selected.length} onClick={this.openRemoveModal} />
+                    <Button primary={true} label="View details" disabled={!this.state.selected.length} />
                 </div>
             </div>
         );

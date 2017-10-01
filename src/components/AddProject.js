@@ -1,23 +1,22 @@
 import React from 'react';
+
+// components
 import * as Actions from '../actions/Actions';
-import { RaisedButton } from 'material-ui';
+
+// material
+import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
-import DatePicker from 'material-ui/DatePicker';
-import ProjectStore from '../stores/ProjectStore';
+import { withStyles } from 'material-ui/styles';
+import Grid from 'material-ui/Grid';
 
 export default class AddProject extends React.Component {
+    constructor(props) {
+        super(props);
 
-    constructor() {
-        super();
-
-        this.handleOnChange = this.handleOnChange.bind(this);
-        this.handleEndDateOnChange = this.handleEndDateOnChange.bind(this);
-        this.handleStartDateOnChange = this.handleStartDateOnChange.bind(this);
         this.addProjectHandle = this.addProjectHandle.bind(this);
         this.state = {};
 
         this.initializeState();
-
     }
 
     initializeState(state) {
@@ -47,75 +46,86 @@ export default class AddProject extends React.Component {
     }
 
     addProjectHandle(e) {
-        Actions.ProjectActions.addProject(this.state.project);
+        const project = {
+            id: Date.now(),
+            title: this.state.title,
+            description: this.state.description,
+            owner: this.state.owner,
+            startDate: this.state.startDate,
+            endDate: this.state.endDate
+        }
+        Actions.ProjectActions.addProject(project);
         Actions.NotificationActions.projectAdded("Project added successfully");
         this.initializeState({ project: null });
     }
 
-    handleEndDateOnChange(event, date) {
-        var project = this.state.project;
-        project.endDate = date.toDateString();
-
+    handleOnChange = name => event => {
         this.setState({
-            project
+            [name]: event.target.value,
         });
-    }
-
-    handleStartDateOnChange(event, date) {
-        var project = this.state.project;
-        project.startDate = date.toDateString();
-
-        this.setState({
-            project
-        });
-    }
-
-    handleOnChange() {
-        const id = Date.now();
-
-        this.setState({
-            project: {
-                id: id,
-                title: this.refs.title.getValue(),
-                description: this.refs.description.getValue(),
-                owner: this.refs.owner.getValue()
-            }
-        });
-    }
+    };
 
     render() {
+
         return (
-            <div className="add-project">
-                <div>
+            <Grid className="add-project" container spacing={24}>
+                <Grid item xs={12}>
                     <h2>Create new project!</h2>
-                </div>
-                <div>
-                    <TextField hintText="Title" floatingLabelText="Title" value={this.state.title} onChange={this.handleOnChange} ref="title" />
-                </div>
-                <div>
+                </Grid>
+                <Grid item xs={12}>
                     <TextField
-                        multiLine={true}
+                        required
+                        label="Title"
+                        placeholder="Title"
+                        value={this.state.title}
+                        onChange={this.handleOnChange('title')}
+                        id="title" />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        multiline
+                        margin="none"
                         rows={4}
                         rowsMax={8}
-                        hintText="Description"
-                        onChange={this.handleOnChange}
-                        floatingLabelText="Description"
-                        ref="description" />
-                </div>
-                <div>
-                    <TextField hintText="Owner" floatingLabelText="Owner" ref="owner" onChange={this.handleOnChange} ref="owner" />
-                </div>
-                <div>
-                    <DatePicker hintText="Start Date" floatingLabelText="Start Date" ref="startDate" onChange={this.handleStartDateOnChange} />
-                </div>
-                <div>
-                    <DatePicker hintText="End Date" floatingLabelText="End Date" ref="endDate" onChange={this.handleEndDateOnChange} />
-                </div>
+                        label="Description"
+                        onChange={this.handleOnChange('description')}
+                        placeholder="Description"
+                        id="description" />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        label="Owner"
+                        placeholder="Owner"
+                        onChange={this.handleOnChange('owner')}
+                        id="owner" />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        label="Start Date"
+                        type="date"
+                        id="startDate"
+                        onChange={this.handleOnChange('startDate')} />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        type="date"
+                        id="endDate"
+                        onChange={this.handleOnChange('endDate')}
+                        label="End Date" />
+                </Grid>
                 <br />
-                <RaisedButton primary={true} onClick={this.addProjectHandle} label="Add Project"></RaisedButton>
+                <Grid item xs={12}>
+                    <Button color="primary" onClick={this.addProjectHandle}>Add Project</Button>
+                </Grid>
                 <br />
                 <br />
-            </div>
+            </Grid>
         );
     }
 }

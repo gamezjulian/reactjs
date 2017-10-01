@@ -1,8 +1,6 @@
 import React from 'react';
 import { Drawer } from 'material-ui';
-import RaisedButton from 'material-ui/RaisedButton';
-import Subheader from 'material-ui/Subheader';
-import Divider from 'material-ui/Divider';
+import Button from 'material-ui/Button';
 
 export default class RemoveProject extends React.Component {
     constructor(props) {
@@ -25,14 +23,12 @@ export default class RemoveProject extends React.Component {
             <Drawer
                 open={true}
                 openSecondary={true}>
-                <Subheader inset={true}>Do you want to delete it?</Subheader>
-                <Divider />
                 <br />
-                <RaisedButton
+                <Button
                     label="Yes"
                     onClick={this.okModal}
                 />
-                <RaisedButton
+                <Button
                     label="No"
                     onClick={this.closeModal}
                 />
