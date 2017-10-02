@@ -25,6 +25,7 @@ class NotificationStore extends EventEmitter {
             case ActionConstants.Project_Added_Message: {
                 console.log(action);
                 this.pushNotification(action.value);
+                break;
             }
             default: {
                 break;

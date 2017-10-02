@@ -1,24 +1,20 @@
 import React from 'react';
 
 import ProjectStore from '../stores/ProjectStore';
-import NotificationStore from '../stores/NotificationStore';
 
-import AddProject from './AddProject';
 import * as Actions from '../actions/Actions';
-import RemoveProject from './RemoveProject';
+import ConfirmationDialog from './ConfirmationDialog';
 
 // material
 
 import Button from 'material-ui/Button';
 import Divider from 'material-ui/Divider';
-
-import {
-    Table,
+import Checkbox from 'material-ui/Checkbox';
+import Table, {
     TableBody,
-    TableHeader,
-    TableHeaderColumn,
-    TableRow,
-    TableRowColumn,
+    TableCell,    
+    TableHead,    
+    TableRow    
 } from 'material-ui/Table';
 
 
@@ -27,116 +23,104 @@ export default class ProjectList extends React.Component {
     constructor() {
         super();
 
-        this.rowSelectionHandler = this.rowSelectionHandler.bind(this);
-        this.removeProjectHandler = this.removeProjectHandler.bind(this);
         this.isSelected = this.isSelected.bind(this);
-        this.openRemoveModal = this.openRemoveModal.bind(this);
-        this.closeRemoveModal = this.closeRemoveModal.bind(this);
 
         this.state = {
             projects: ProjectStore.getProjects(),
-            selected: [],
+            selected: '',
             open: false
         };
-    }
-
-    componentWillMount() {
-        ProjectStore.on("project_added", this.getProjects)
-    }
-
-    componentWillUnmount() {
-        ProjectStore.removeListener("project_added", this.getProjects);
     }
 
     getProjects = () => {
         this.setState({ projects: ProjectStore.getProjects() });
     }
 
-    removeProjectHandler = () => {
+    removeProject = () => {
         let { selected } = this.state;
         const projects = ProjectStore.getProjects();
-        const proj = projects[selected[0]];
+        const proj = projects.find(x => x.id === selected);
         Actions.ProjectActions.removeProject(proj.id);
         this.setState({
-            open: false,
-            selected: []
+            selected: ''
         });
     }
 
-    rowSelectionHandler(selectedRows) {
-        if (selectedRows.length) {
+
+    handleClick = (event, id) => {
+        if (this.state.selected !== id) {
             this.setState({
-                selected: selectedRows
-            });
+                selected: id
+            })
         } else {
             this.setState({
-                selected: []
-            });
+                selected: ''
+            })
         }
     }
-
-    closeRemoveModal() {
-        this.setState({
-            open: false
-        });
+ 
+    goToDetails = () => {
+        this.props.history.push(`/project/${this.state.selected}`);
     }
 
-    openRemoveModal() {
-        this.setState({
-            open: this.state.selected.length != 0
-        });
-    }
-
-    isSelected(index) {
-        return this.state.selected.indexOf(index) !== -1;
+    isSelected = (id) => {
+        return this.state.selected === id
     };
 
     render() {
-
         const { projects } = this.state;
         const projs = projects.map((p, index) => {
+
+            const isSelected = this.isSelected(p.id);
             return (
-                <TableRow key={p.id} selected={this.isSelected(index)}>
-                    <TableRowColumn>{p.id}</TableRowColumn>
-                    <TableRowColumn>{p.title}</TableRowColumn>
-                    <TableRowColumn>{p.description}</TableRowColumn>
-                    <TableRowColumn>{p.owner}</TableRowColumn>
-                    <TableRowColumn>{p.startDate}</TableRowColumn>
-                    <TableRowColumn>{p.endDate}</TableRowColumn>
+                <TableRow
+                    hover
+                    key={p.id}
+                    onClick={event => this.handleClick(event, p.id)}
+                    selected={isSelected}
+                >
+                    <TableCell>
+                        <Checkbox checked={isSelected} ></Checkbox>
+                    </TableCell>
+                    <TableCell >{p.id}</TableCell >
+                    <TableCell >{p.title}</TableCell >
+                    <TableCell >{p.description}</TableCell >
+                    <TableCell >{p.owner}</TableCell >
+                    <TableCell >{p.startDate}</TableCell >
+                    <TableCell >{p.endDate}</TableCell >
                 </TableRow>
             )
         })
 
         return (
-            <div>
-                <Table onRowSelection={this.rowSelectionHandler}>
-                    <TableHeader>
+            <div className="project-list">
+                <Table>
+                    <TableHead>
                         <TableRow>
-                            <TableHeaderColumn>ID</TableHeaderColumn>
-                            <TableHeaderColumn>Title</TableHeaderColumn>
-                            <TableHeaderColumn>Description</TableHeaderColumn>
-                            <TableHeaderColumn>Owner</TableHeaderColumn>
-                            <TableHeaderColumn>Start Date</TableHeaderColumn>
-                            <TableHeaderColumn>End Date</TableHeaderColumn>
+                            <TableCell>
+                            </TableCell>
+                            <TableCell>ID</TableCell >
+                            <TableCell>Title</TableCell >
+                            <TableCell>Description</TableCell >
+                            <TableCell>Owner</TableCell>
+                            <TableCell>Start Date</TableCell >
+                            <TableCell>End Date</TableCell >
                         </TableRow>
-                    </TableHeader>
-                    <TableBody
-                        deselectOnClickaway={false}
-                        displayRowCheckbox={true}>
+                    </TableHead>
+                    <TableBody>
                         {projs}
                     </TableBody>
                 </Table>
-
-                {this.state.open ?
-                    <RemoveProject onRemove={this.removeProjectHandler} onClose={this.closeRemoveModal} />
-                    : null
-                }
-
                 <br />
                 <Divider />
                 <div>
-                    <Button primary={true} label="Delete" disabled={!this.state.selected.length} onClick={this.openRemoveModal} />
-                    <Button primary={true} label="View details" disabled={!this.state.selected.length} />
+                    <ConfirmationDialog
+                        title={'Remove project'}
+                        content={'You are about to delete the project. Are you sure?'}
+                        disabled={!this.state.selected}
+                        onRemove={this.removeProject}
+                    />
+                    <Button color="primary" disabled={!this.state.selected} onClick={this.goToDetails} >Details</Button>
                 </div>
             </div>
         );

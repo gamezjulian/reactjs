@@ -2,16 +2,36 @@ import { EventEmitter } from 'events';
 import dispatcher from '../dispatcher/dispatcher';
 import ActionConstants from '../constants/actions';
 
+const data = {
+    projects: [{
+        id: Date.now(),
+        title: "Bain Capital",
+        description: "O365",
+        owner: "Antonio Briones"
+    },
+    {
+        id: Date.now() + 1,
+        title: "Whole Food Market",
+        description: "Unily",
+        owner: "Julian Gamez"
+    }
+    ]
+}
+
 class ProjectStore extends EventEmitter {
 
     constructor() {
         super();
 
-        this.projects = [];
+        this.projects = data.projects;
     }
 
     getProjects() {
         return this.projects;
+    }
+
+    getProject(id) {
+        return this.projects.find(x => x.id == id);
     }
 
     addProject(project) {

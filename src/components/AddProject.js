@@ -6,40 +6,36 @@ import * as Actions from '../actions/Actions';
 // material
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
-import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 
 export default class AddProject extends React.Component {
     constructor(props) {
         super(props);
-
-        this.addProjectHandle = this.addProjectHandle.bind(this);
-        this.state = {};
-
         this.initializeState();
+        this.addProjectHandle = this.addProjectHandle.bind(this);
     }
 
     initializeState(state) {
         if (!state) {
             this.state = {
                 project: {
-                    id: null,
-                    title: null,
-                    description: null,
-                    owner: null,
-                    startDate: null,
-                    endDate: null
+                    id: '',
+                    title: '',
+                    description: '',
+                    owner: '',
+                    startDate: '',
+                    endDate: ''
                 }
             };
         } else {
             this.setState({
                 project: {
-                    id: null,
-                    title: null,
-                    description: null,
-                    owner: null,
-                    startDate: null,
-                    endDate: null
+                    id: '',
+                    title: '',
+                    description: '',
+                    owner: '',
+                    startDate: '',
+                    endDate: ''
                 }
             });
         }
@@ -48,11 +44,11 @@ export default class AddProject extends React.Component {
     addProjectHandle(e) {
         const project = {
             id: Date.now(),
-            title: this.state.title,
-            description: this.state.description,
-            owner: this.state.owner,
-            startDate: this.state.startDate,
-            endDate: this.state.endDate
+            title: this.state.project.title,
+            description: this.state.project.description,
+            owner: this.state.project.owner,
+            startDate: this.state.project.startDate,
+            endDate: this.state.project.endDate
         }
         Actions.ProjectActions.addProject(project);
         Actions.NotificationActions.projectAdded("Project added successfully");
@@ -60,72 +56,71 @@ export default class AddProject extends React.Component {
     }
 
     handleOnChange = name => event => {
-        this.setState({
-            [name]: event.target.value,
-        });
+        var project = this.state.project;
+        project[name] = event.target.value;
+        this.setState({ project });
     };
 
     render() {
-
         return (
-            <Grid className="add-project" container spacing={24}>
-                <Grid item xs={12}>
-                    <h2>Create new project!</h2>
+            <form>
+                <Grid className="add-project" container spacing={24}>
+                    <Grid item xs={12}>
+                        <h2>Create new project!</h2>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Title"
+                            placeholder="Title"
+                            value={this.state.project.title}
+                            onChange={this.handleOnChange('title')} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            multiline
+                            margin="none"
+                            rows={4}
+                            rowsMax={8}
+                            label="Description"
+                            onChange={this.handleOnChange('description')}
+                            placeholder="Description"
+                            value={this.state.project.description} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Owner"
+                            placeholder="Owner"
+                            onChange={this.handleOnChange('owner')}
+                            value={this.state.project.owner} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            label="Start Date"
+                            type="date"
+                            value={this.state.project.startDate}
+                            onChange={this.handleOnChange('startDate')} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            type="date"
+                            onChange={this.handleOnChange('endDate')}
+                            value={this.state.project.endDate}
+                            label="End Date" />
+                    </Grid>
+                    <br />
+                    <Grid item xs={12}>
+                        <Button color="primary" onClick={this.addProjectHandle}>Add Project</Button>
+                    </Grid>
+                    <br />
+                    <br />
                 </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        label="Title"
-                        placeholder="Title"
-                        value={this.state.title}
-                        onChange={this.handleOnChange('title')}
-                        id="title" />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        multiline
-                        margin="none"
-                        rows={4}
-                        rowsMax={8}
-                        label="Description"
-                        onChange={this.handleOnChange('description')}
-                        placeholder="Description"
-                        id="description" />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        label="Owner"
-                        placeholder="Owner"
-                        onChange={this.handleOnChange('owner')}
-                        id="owner" />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        label="Start Date"
-                        type="date"
-                        id="startDate"
-                        onChange={this.handleOnChange('startDate')} />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        type="date"
-                        id="endDate"
-                        onChange={this.handleOnChange('endDate')}
-                        label="End Date" />
-                </Grid>
-                <br />
-                <Grid item xs={12}>
-                    <Button color="primary" onClick={this.addProjectHandle}>Add Project</Button>
-                </Grid>
-                <br />
-                <br />
-            </Grid>
+            </form>
         );
     }
 }
