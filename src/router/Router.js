@@ -14,7 +14,7 @@ export default class Router extends React.Component {
                     <Switch>
                         <Route exact path="/" component={AddProject} />
                         <Route exact path="/projects" component={ProjectList} />
-                        <Route path="/project/:id" component={ProjectDetails} />
+                        <Route path="/project/:id?" component={ProjectDetails} />
                     </Switch>
                 </div>
             </BrowserRouter>

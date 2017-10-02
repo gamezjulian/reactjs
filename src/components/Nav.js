@@ -41,7 +41,7 @@ class Nav extends React.Component {
                 <BottomNavigationButton
                     icon={<LocationOnIcon />}
                     label="Details"
-                    onClick={this.handleOnClick('/project/:id')}
+                    onClick={this.handleOnClick('/project/')}
                 />
             </BottomNavigation>
         );
